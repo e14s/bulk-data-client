@@ -14,7 +14,7 @@
      * FHIR server base URL. Can be overridden by the `-f` or `--fhir-url`
      * CLI parameter.
      */
-    fhirUrl: "https://bulk-data.smarthealthit.org/eyJlcnIiOiIiLCJwYWdlIjoxMDAwMCwidGx0IjoxNSwibSI6MSwiZGVsIjowLCJzZWN1cmUiOjB9/fhir",
+    fhirUrl: "https://bulk-data.smarthealthit.org/fhir",
 
     /**
      * The Bulk Data server token URL ("none" for open servers)

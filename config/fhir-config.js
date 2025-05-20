@@ -176,9 +176,12 @@
         https: {
             rejectUnauthorized: true // reject self-signed certs
         },
-        // timeout: 30000, // 30 seconds
+        timeout: 20000, // 20 seconds custom timeout
         headers: {
-            // pass custom headers
+            "accept": "application/fhir+json",
+            "prefer": "respond-async",
+            "content-type": "application/json",            
+            "x-client-id": "fhir-bulk-client"
         }
     },
 
