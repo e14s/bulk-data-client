@@ -288,7 +288,7 @@
      * 
      * Can be overridden from terminal parameter `-d` or `--destination`
      */
-    destination: "./downloads/",
+    destination: "./downloads",
 
     /**
      * **Example: `us-east-1`**

@@ -104,7 +104,6 @@ dist
 .tern-port
 
 downloads/*
-config/*
 !.gitkeep
 !config/defaults.js
 .DS_Store
