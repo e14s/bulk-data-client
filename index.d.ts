@@ -37,6 +37,8 @@ export declare namespace BulkDataClient {
          */
         tokenUrl?: string
 
+        authUrl?: string
+
         /**
          * The private key used to sign authentication tokens. This must be set
          * in the config file, unless we are connecting to open server (one
@@ -45,6 +47,10 @@ export declare namespace BulkDataClient {
         privateKey?: JWK
 
         clientId?: string,
+
+        clientSecrets?: string,
+
+        access_token?: string,
 
         /**
          * When we request an access token, specify its lifetime in seconds.
@@ -330,6 +336,8 @@ export declare namespace BulkDataClient {
          */
         tokenUrl: string
 
+        authUrl: string        
+
         /**
          * The private key used to sign authentication tokens
          */
@@ -337,9 +345,14 @@ export declare namespace BulkDataClient {
 
         clientId: string
 
+        clientSecrets: string
+
         scope?: string
 
         accessTokenLifetime: number
+
+        authTokenLifetime: number
+
 
         reporter: "cli" | "text"
 

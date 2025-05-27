@@ -81,6 +81,17 @@ APP.action(async (args) => {
             return;
         }
     }
+    // Verify Access Token -------------------------------------------------------
+    if (options.authUrl !== "none") {
+        if (!options.clientId) {
+            console.log("A 'clientId' option must be set in the config file!".red);
+            return;
+        }
+        else if (!options.clientSecrets) {
+            console.log("A 'clientSecrets' option must be set in the config file!".red);
+            return;
+        }
+    }
     options.log = {
         enabled: true,
         ...(options.log || {})

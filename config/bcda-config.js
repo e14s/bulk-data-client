@@ -6,7 +6,7 @@
  * OVERRIDE THE PROPERTIES YOU NEED TO CHANGE. Then use the `--config` parameter
  * in CLI to load your configuration file.
  * 
- * @type {import("../built/app").BulkDataClient.ConfigFileOptions}
+ * @type {import("..").BulkDataClient.ConfigFileOptions}
  */
  module.exports = {
 
@@ -14,12 +14,17 @@
      * FHIR server base URL. Can be overridden by the `-f` or `--fhir-url`
      * CLI parameter.
      */
-    fhirUrl: "https://bulk-data.smarthealthit.org/eyJlcnIiOiIiLCJwYWdlIjoxMDAwMCwidGx0IjoxNSwibSI6MSwiZGVsIjowLCJzZWN1cmUiOjB9/fhir",
+    fhirUrl: "https://sandbox.bcda.cms.gov/api/v2/",
 
     /**
      * The Bulk Data server token URL ("none" for open servers)
      */
     tokenUrl: "none",
+
+    /**
+     * The Bulk Data server token URL
+     */
+    authUrl: "https://sandbox.bcda.cms.gov/auth/token",    
  
     /**
      * The private key (JWK) used to sign authentication tokens. This is not
@@ -28,9 +33,20 @@
     privateKey: {},
 
     /**
+     * Bearer access token. This is not
+     * needed for open servers
+     */
+    //access_token: "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDgwMTMwMzcsImp0aSI6IjI4Mjk3NDcxLTU5OTgtNDJjMC05NGE4LWU0MDhjNzEyNjkyMCIsImlhdCI6MTc0ODAxMTgzNywiaXNzIjoic3NhcyIsInVzZSI6IkFjY2Vzc1Rva2VuIiwiY2lkIjoiMjQ2MmM5NmItNjQyNy00ZWZiLWFlZDctMTE4ZTIwYzJlOTk3Iiwic3lzIjoiMzQiLCJkYXQiOiJ7XCJjbXNfaWRzXCI6W1wiQTk5OTRcIl19In0.Wqtb6FVKeWNUYTmie3Y3p7GKXcdtWtTvSVcZ5JHaNYE5nrO4XGWYFWLZy-wweaOrUPoVSz9yo_7JAGqftoLpD8MhHLB7Lo9q_EiWGD9Z8uncx1YljEta2rP3PbZE8TFQOr_MkpEhrjZtUbomhmylFaRlIpNxX-ZNEYlKfnd-kR4LRMx_q37otSy9v4EDBPEFaiw103fjtEhf-G35Gte-lv6B5hP1M5hvxKpd7aP1rwak8wRbAzbWAtfEO6y4CMPPiypf5L9Q_5CVfkzma4w8yIej2MN7rMQ_8IUtSldta9N0Q6HPOiSdvLp4iKI-NpUuVn4pIv4RoGfuA7Z-mv-CZQ",    
+
+    /**
      * This is not needed for open servers
      */
-    clientId: "",
+    clientId: "f0d89614-efb9-49fa-bb38-996811f235a1",
+
+        /**
+     * This is not needed for open servers
+     */
+    clientSecrets: "2aa8b8f96f62370f3abe951cc715171394fa4a688f1f1a7252a6a5824571c07931a8a6f1dede92a0",
 
     /**
      * The scope to use in the authorization request. If not set, defaults to
@@ -43,6 +59,12 @@
      * may ignore or restrict this to its own boundaries
      */
     accessTokenLifetime: 300,
+
+    /**
+     * The access token lifetime in seconds. Note that the authentication server
+     * may ignore or restrict this to its own boundaries
+     */
+    authTokenLifetime: 1200,    
 
     /**
      * The default reporter is "cli". That works well in terminal and
@@ -71,7 +93,7 @@
      * 
      * Can be overridden from terminal parameter `-F` or `--_outputFormat`
      */
-    _since: "2024-04-17T10:59:01-04:00",
+    _since: "",
 
     /**
      * The value of the `_type` parameter for Bulk Data kick-off requests.
@@ -86,7 +108,6 @@
      * Will be ignored if empty or falsy.
      * 
      * Can be overridden from terminal parameter `-e` or `--_elements`
-     * 
      */
     _elements: "",
 
@@ -111,7 +132,6 @@
      * Will be ignored if empty or falsy.
      * 
      * Can be overridden from terminal parameter `-q` or `--_typeFilter`
-     * Capability statement
      */
     _typeFilter: "",
 
@@ -155,7 +175,7 @@
      * a Prefer: handling=lenient header is included in the request, the server
      * MAY process the request instead of returning an error.
      */
-    organizeOutputBy: "Organization",
+    organizeOutputBy: "",
 
     /**
      * If true, adds `handling=lenient` to the `prefer` request header. This may
@@ -164,7 +184,7 @@
      * 
      * Can be overridden from terminal parameter `--lenient`
      */
-    lenient: true,
+    lenient: false,
 
     /**
      * Custom options for every request, EXCLUDING the authorization request and
@@ -178,21 +198,19 @@
         https: {
             rejectUnauthorized: true // reject self-signed certs
         },
-        timeout: 120000, // 120 seconds custom timeout
+        timeout: 300000, // 300 seconds or 5 minutes custom timeout
         headers: {
-            "accept": "application/fhir+json",
-            "prefer": "respond-async",
-            "content-type": "application/json",            
-            "x-client-id": "fhir-bulk-client"
+            "x-client-id": "fhir-bulk", // pass custom headers
+//            "Authorization": "Bearer eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDgwMTMwMzcsImp0aSI6IjI4Mjk3NDcxLTU5OTgtNDJjMC05NGE4LWU0MDhjNzEyNjkyMCIsImlhdCI6MTc0ODAxMTgzNywiaXNzIjoic3NhcyIsInVzZSI6IkFjY2Vzc1Rva2VuIiwiY2lkIjoiMjQ2MmM5NmItNjQyNy00ZWZiLWFlZDctMTE4ZTIwYzJlOTk3Iiwic3lzIjoiMzQiLCJkYXQiOiJ7XCJjbXNfaWRzXCI6W1wiQTk5OTRcIl19In0.Wqtb6FVKeWNUYTmie3Y3p7GKXcdtWtTvSVcZ5JHaNYE5nrO4XGWYFWLZy-wweaOrUPoVSz9yo_7JAGqftoLpD8MhHLB7Lo9q_EiWGD9Z8uncx1YljEta2rP3PbZE8TFQOr_MkpEhrjZtUbomhmylFaRlIpNxX-ZNEYlKfnd-kR4LRMx_q37otSy9v4EDBPEFaiw103fjtEhf-G35Gte-lv6B5hP1M5hvxKpd7aP1rwak8wRbAzbWAtfEO6y4CMPPiypf5L9Q_5CVfkzma4w8yIej2MN7rMQ_8IUtSldta9N0Q6HPOiSdvLp4iKI-NpUuVn4pIv4RoGfuA7Z-mv-CZQ" // pass custom headers
         }
-    },
+    },    
 
     /**
      * How many downloads to run in parallel. This will speed up the
      * download but can also overload the server. Don't be too greedy and
      * don't set this to more than 10!
      */
-    parallelDownloads: 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ,
+    parallelDownloads: 5,
 
     /**
      * In some cases it might be useful to also save the export manifest
@@ -293,27 +311,22 @@
      * 
      * Can be overridden from terminal parameter `-d` or `--destination`
      */
-    destination: "s3://fhir-bulk-data/dataset-ndjson/", // Location for FHIR datasets
+    destination: "./downloads/bcda/",
 
     /**
      * **Example: `us-east-1`**
      */
-    awsRegion: "us-east-1",
+    awsRegion: "",
 
     /**
      * Only needed if `destination` points to S3
      */
-    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID || "<INPUT_ACCESS_KEY_ID>",
+    awsAccessKeyId: "",
     
     /**
      * Only needed if `destination` points to S3
      */
-    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "<INPUT_SECRET_ACCESS_KEY>",
-
-    /**
-    * Only needed if `destination` points to S3
-    */
-    awsSessionToken:  process.env.AWS_SESSION_TOKEN || "<INPUT_SESSION_TOKEN>",   
+    awsSecretAccessKey: "",
 
     log: {
         enabled: true,
@@ -353,4 +366,3 @@
         limit: 5,
     },
 }
-

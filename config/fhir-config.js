@@ -291,7 +291,7 @@
      * 
      * Can be overridden from terminal parameter `-d` or `--destination`
      */
-    destination: "./downloads",
+    destination: "./downloads/fhir/",
 
     /**
      * **Example: `us-east-1`**
