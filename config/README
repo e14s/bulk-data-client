@@ -4,7 +4,7 @@
 
 In order make it workable, make sure you configure AWS config settings in your running environment for FHIR Bulk Account.
 
-![AWS Account](/config/account.png)
+![AWS Account](/account.png)
 
 ```sh
 export AWS_ACCESS_KEY_ID="ASIAZZBVXAFOMDPSMJZI"
@@ -34,4 +34,4 @@ node . --config config/fhir-config.js --reporter text
 
 ### AWS Bucket location for both Bulk data client and BCDA:
 
-![S3 Bucket](/config/s3.png)
+![S3 Bucket](/s3.png)
