@@ -291,22 +291,28 @@
      * 
      * Can be overridden from terminal parameter `-d` or `--destination`
      */
-    destination: "./downloads/fhir/",
+    destination: "s3://fhir-bulk-data/dataset-ndjson/fhir", // Location for FHIR datasets
 
     /**
      * **Example: `us-east-1`**
      */
-    awsRegion: "",
+    awsRegion: "us-east-1",
 
     /**
      * Only needed if `destination` points to S3
      */
-    awsAccessKeyId: "",
+    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID || "<INPUT_ACCESS_KEY_ID>",
     
     /**
      * Only needed if `destination` points to S3
      */
-    awsSecretAccessKey: "",
+    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "<INPUT_SECRET_ACCESS_KEY>",
+
+    /**
+    * Only needed if `destination` points to S3
+    */
+    awsSessionToken:  process.env.AWS_SESSION_TOKEN || "<INPUT_SESSION_TOKEN>",   
+
 
     log: {
         enabled: true,

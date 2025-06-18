@@ -26,6 +26,7 @@ import {
     filterResponseHeaders,
     formatDuration,
     getAccessTokenExpiration,
+    getAuthTokenExpiration,
     getCapabilityStatement,
     normalizeDestination,
     wait
@@ -287,6 +288,7 @@ class BulkDataClient extends EventEmitter
         }
 
         const authToken = await this.getAuthToken();
+
         if (authToken) {
             _options.headers = {
                 ..._options.headers,
@@ -338,7 +340,7 @@ class BulkDataClient extends EventEmitter
             return this.authToken;
         }
 
-        const { authUrl, clientId, authTokenLifetime, clientSecrets } = this.options;
+        const { authUrl, clientId, clientSecrets } = this.options;
 
         if (!authUrl || authUrl == "none" || !clientId || !clientSecrets) {
             return ""

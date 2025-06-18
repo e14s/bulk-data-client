@@ -177,7 +177,7 @@ class BulkDataClient extends events_1.EventEmitter {
         if (this.authToken && this.authTokenExpiresAt - 10 > Date.now() / 1000) {
             return this.authToken;
         }
-        const { authUrl, clientId, authTokenLifetime, clientSecrets } = this.options;
+        const { authUrl, clientId, clientSecrets } = this.options;
         if (!authUrl || authUrl == "none" || !clientId || !clientSecrets) {
             return "";
         }
