@@ -63,7 +63,7 @@ APP.action(async (args) => {
         // Initialize bucket
         const bucketStatus = await (0, bootstrap_1.default)(s3);
         if (!bucketStatus?.success) {
-            console.log("Error initializing bucket:", bucketStatus?.message);
+            console.error("Error initializing bucket:", bucketStatus?.message);
             return;
         }
         console.log(bucketStatus.message);

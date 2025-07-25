@@ -69,7 +69,7 @@ APP.action(async (args: BulkDataClient.CLIOptions) => {
         // Initialize bucket
         const bucketStatus = await initBucket(s3);
         if (!bucketStatus?.success) {
-            console.log("Error initializing bucket:", bucketStatus?.message);
+            console.error("Error initializing bucket:");
             return;
         }
         console.log(bucketStatus.message);
