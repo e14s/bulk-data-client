@@ -13,6 +13,8 @@ const BulkDataClient_1 = __importDefault(require("./lib/BulkDataClient"));
 const cli_1 = __importDefault(require("./reporters/cli"));
 const text_1 = __importDefault(require("./reporters/text"));
 const loggers_1 = require("./loggers");
+const aws_sdk_1 = __importDefault(require("aws-sdk"));
+const bootstrap_1 = __importDefault(require("./bootstrap"));
 const reporters = {
     cli: cli_1.default,
     text: text_1.default
@@ -49,6 +51,32 @@ APP.action(async (args) => {
         Object.assign(options, cfg);
     }
     Object.assign(options, params);
+    //S3 Bucket Creation --------------------------------------------------------
+    if (options.awsAccessKeyId && options.awsSecretAccessKey && options.awsRegion) {
+        aws_sdk_1.default.config.update({
+            accessKeyId: options.awsAccessKeyId,
+            secretAccessKey: options.awsSecretAccessKey,
+            sessionToken: options.awsSessionToken,
+            region: options.awsRegion
+        });
+        const s3 = new aws_sdk_1.default.S3();
+        // Initialize bucket
+        const bucketStatus = await (0, bootstrap_1.default)(s3);
+        if (!bucketStatus?.success) {
+            console.log("Error initializing bucket:", bucketStatus?.message);
+            return;
+        }
+        console.log(bucketStatus.message);
+    }
+    else {
+        console.log("AWS credentials or region not provided. Skipping S3 bucket initialization.");
+        return;
+    }
+    if (!options.fhirUrl) {
+        console.log("A 'fhirUrl' is required as configuration option, or as '-f' or " +
+            "'--fhir-url' parameter!".red);
+        return APP.help();
+    }
     // Verify fhirUrl ----------------------------------------------------------
     if (!options.fhirUrl) {
         console.log("A 'fhirUrl' is required as configuration option, or as '-f' or " +

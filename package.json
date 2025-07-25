@@ -28,10 +28,12 @@
   },
   "homepage": "https://github.com/smart-on-fhir/bulk-data-client#readme",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.850.0",
     "@hapi/code": "^8.0.3",
     "aws-sdk": "^2.987.0",
     "colors": "^1.4.0",
     "commander": "^8.1.0",
+    "dotenv": "^17.2.1",
     "got": "^11.8.6",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
@@ -57,6 +59,6 @@
     "nyc": "^15.1.0",
     "ts-mocha": "^10.0.0",
     "typedoc": "^0.22.3",
-    "typescript": "^4.4.2"
+    "typescript": "^4.9.5"
   }
 }

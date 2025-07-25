@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -55,6 +59,9 @@ const debug = (0, util_1.debuglog)("app-request");
  * ```
  */
 class BulkDataClient extends events_1.EventEmitter {
+    get statusEndpoint() {
+        return this._statusEndpoint;
+    }
     /**
      * Nothing special is done here - just remember the options and create
      * AbortController instance
@@ -91,9 +98,6 @@ class BulkDataClient extends events_1.EventEmitter {
                 this.emit("allDownloadsComplete", jobs.map(j => j.status).filter(Boolean));
             }
         });
-    }
-    get statusEndpoint() {
-        return this._statusEndpoint;
     }
     /**
      * Abort any current asynchronous task. This may include:

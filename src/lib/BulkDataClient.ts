@@ -965,7 +965,7 @@ class BulkDataClient extends EventEmitter
 
             if (this.options.awsRegion) {
                 aws.config.update({ region: this.options.awsRegion })
-            }
+            }       
 
             let bucket = destination.substring(5);
             if (subFolder) {

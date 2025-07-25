@@ -8,6 +8,10 @@
  * 
  * @type {import("..").BulkDataClient.ConfigFileOptions}
  */
+
+ const bucket = process.env.BUCKET_NAME || "fhir-bulk-data";
+ 
+
  module.exports = {
 
     /**
@@ -291,12 +295,13 @@
      * 
      * Can be overridden from terminal parameter `-d` or `--destination`
      */
-    destination: "s3://fhir-bulk-data/dataset-ndjson/fhir", // Location for FHIR datasets
+    destination: `s3://${bucket}/dataset-ndjson/fhir`, // Location for FHIR datasets
+
 
     /**
      * **Example: `us-east-1`**
      */
-    awsRegion: "us-east-1",
+    awsRegion: process.env.AWS_REGION || "us-east-1",
 
     /**
      * Only needed if `destination` points to S3

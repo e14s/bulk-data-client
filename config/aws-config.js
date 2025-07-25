@@ -293,7 +293,7 @@
      * 
      * Can be overridden from terminal parameter `-d` or `--destination`
      */
-    destination: "s3://fhir-bulk-data/dataset-ndjson/", // Location for FHIR datasets
+    destination: "s3://" + process.env.BUCKET_NAME + "/dataset-ndjson/", // Location for FHIR datasets
 
     /**
      * **Example: `us-east-1`**
