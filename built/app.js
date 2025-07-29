@@ -14,7 +14,7 @@ const cli_1 = __importDefault(require("./reporters/cli"));
 const text_1 = __importDefault(require("./reporters/text"));
 const loggers_1 = require("./loggers");
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
-const bootstrap_1 = __importDefault(require("./bootstrap"));
+const bootstrap_1 = require("./bootstrap");
 const reporters = {
     cli: cli_1.default,
     text: text_1.default
@@ -61,15 +61,21 @@ APP.action(async (args) => {
         });
         const s3 = new aws_sdk_1.default.S3();
         // Initialize bucket
-        const bucketStatus = await (0, bootstrap_1.default)(s3);
+        const bucketStatus = await (0, bootstrap_1.initBucket)(s3);
         if (!bucketStatus?.success) {
-            console.error("Error initializing bucket:", bucketStatus?.message);
+            console.error("Error initializing bucket:");
             return;
         }
-        console.log(bucketStatus.message);
+        /*
+                // Add bucket policy
+                console.log("Adding bucket policy...");
+                await addBucketPolicy(); // public policies are blocked by the BlockPublicPolicy block public access setting
+                // If the bucket policy is successfully added, log the success message
+                console.log("Bucket policy added successfully.");
+        */
     }
     else {
-        console.log("AWS credentials or region not provided. Skipping S3 bucket initialization.");
+        console.log("AWS credentials or region not provided. Cannot proceed with S3 bucket initialization.");
         return;
     }
     if (!options.fhirUrl) {
@@ -110,7 +116,7 @@ APP.action(async (args) => {
         }
     }
     // Verify Access Token -------------------------------------------------------
-    if (options.authUrl !== "none") {
+    if (options.authUrl) {
         if (!options.clientId) {
             console.log("A 'clientId' option must be set in the config file!".red);
             return;

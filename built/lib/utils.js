@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizeDestination = exports.filterResponseHeaders = exports.createDecompressor = exports.exit = exports.ask = exports.generateProgress = exports.fhirInstant = exports.assert = exports.humanFileSize = exports.getAuthTokenExpiration = exports.getAccessTokenExpiration = exports.print = exports.formatDuration = exports.wait = exports.detectTokenUrl = exports.getTokenEndpointFromCapabilityStatement = exports.getTokenEndpointFromWellKnownSmartConfig = exports.getCapabilityStatement = exports.getWellKnownSmartConfig = void 0;
+exports.normalizeDestination = exports.filterResponseHeaders = exports.createDecompressor = exports.exit = exports.ask = exports.generateProgress = exports.fhirInstant = exports.assert = exports.humanFileSize = exports.getAccessTokenExpiration = exports.print = exports.formatDuration = exports.wait = exports.detectTokenUrl = exports.getTokenEndpointFromCapabilityStatement = exports.getTokenEndpointFromWellKnownSmartConfig = exports.getCapabilityStatement = exports.getWellKnownSmartConfig = void 0;
 require("colors");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const url_1 = require("url");
@@ -202,21 +202,6 @@ function getAccessTokenExpiration(tokenResponse) {
     return now + 300;
 }
 exports.getAccessTokenExpiration = getAccessTokenExpiration;
-/**
- * Given a token response, computes and returns the expiresAt timestamp.
- * Note that this should only be used immediately after an access token is
- * received, otherwise the computed timestamp will be incorrect.
- */
-function getAuthTokenExpiration(tokenResponse) {
-    const now = Math.floor(Date.now() / 1000);
-    // Option 1 - using the expires_in property of the token response
-    if (tokenResponse.expires_in) {
-        return now + tokenResponse.expires_in;
-    }
-    // Option 2 - if none of the above worked set this to 5 minutes after now
-    return now + 1200;
-}
-exports.getAuthTokenExpiration = getAuthTokenExpiration;
 /**
  * Returns the byte size with units
  * @param fileSizeInBytes The size to format

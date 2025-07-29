@@ -74,16 +74,10 @@ class BulkDataClient extends events_1.EventEmitter {
          */
         this.accessToken = "";
         /**
-         * The last known access token is stored here. It will be renewed when it
-         * expires.
-         */
-        this.authToken = "";
-        /**
          * Every time we get new access token, we set this field based on the
          * token's expiration time.
          */
         this.accessTokenExpiresAt = 0;
-        this.authTokenExpiresAt = 0;
         this.options = options;
         this.abortController = new AbortController();
         this.abortController.signal.addEventListener("abort", () => {
@@ -135,13 +129,6 @@ class BulkDataClient extends events_1.EventEmitter {
                 authorization: `Bearer ${accessToken}`
             };
         }
-        const authToken = await this.getAuthToken();
-        if (authToken) {
-            _options.headers = {
-                ..._options.headers,
-                authorization: `Bearer ${authToken}`
-            };
-        }
         const req = (0, request_1.default)(_options);
         const abort = () => {
             debug(`Aborting ${label}`);
@@ -177,75 +164,49 @@ class BulkDataClient extends events_1.EventEmitter {
      * If the token is expired (or will expire in the next 10 seconds), a new
      * one will be requested and cached.
      */
-    async getAuthToken() {
-        if (this.authToken && this.authTokenExpiresAt - 10 > Date.now() / 1000) {
-            return this.authToken;
-        }
-        const { authUrl, clientId, clientSecrets } = this.options;
-        if (!authUrl || authUrl == "none" || !clientId || !clientSecrets) {
-            return "";
-        }
-        const auth = btoa(clientId + ":" + clientSecrets); // Encode to Base64
-        const authRequest = (0, request_1.default)(authUrl, {
-            method: "POST",
-            responseType: "json",
-            headers: {
-                "Authorization": "Basic " + auth,
-                "accept": "application/json"
-            }
-        });
-        const abort = () => {
-            debug("Aborting authorization request");
-            authRequest.cancel();
-        };
-        this.abortController.signal.addEventListener("abort", abort, { once: true });
-        return authRequest.then(res => {
-            (0, utils_1.assert)(res.body, "Authorization request got empty body");
-            (0, utils_1.assert)(res.body.access_token, "Authorization response does not include access_token");
-            (0, utils_1.assert)(res.body.expires_in, "Authorization response does not include expires_in");
-            this.accessToken = res.body.access_token || "";
-            this.accessTokenExpiresAt = (0, utils_1.getAccessTokenExpiration)(res.body);
-            this.emit("authorize", this.accessToken);
-            return res.body.access_token;
-        }).finally(() => {
-            this.abortController.signal.removeEventListener("abort", abort);
-        });
-    }
-    /**
-     * Get an access token to be used as bearer in requests to the server.
-     * The token is cached so that we don't have to authorize on every request.
-     * If the token is expired (or will expire in the next 10 seconds), a new
-     * one will be requested and cached.
-     */
     async getAccessToken() {
         if (this.accessToken && this.accessTokenExpiresAt - 10 > Date.now() / 1000) {
             return this.accessToken;
         }
-        const { tokenUrl, clientId, accessTokenLifetime, privateKey } = this.options;
-        if (!tokenUrl || tokenUrl == "none" || !clientId || !privateKey) {
+        const { tokenUrl, clientId, clientSecrets, accessTokenLifetime, privateKey } = this.options;
+        if (!tokenUrl || tokenUrl == "none" || !clientId || !privateKey || !clientSecrets) {
             return "";
         }
-        const claims = {
-            iss: clientId,
-            sub: clientId,
-            aud: tokenUrl,
-            exp: Math.round(Date.now() / 1000) + accessTokenLifetime,
-            jti: node_jose_1.default.util.randomBytes(10).toString("hex")
-        };
-        const token = jsonwebtoken_1.default.sign(claims, privateKey.toPEM(true), {
-            algorithm: privateKey.alg,
-            keyid: privateKey.kid
-        });
-        const authRequest = (0, request_1.default)(tokenUrl, {
-            method: "POST",
-            responseType: "json",
-            form: {
-                scope: this.options.scope || "system/*.rs",
-                grant_type: "client_credentials",
-                client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-                client_assertion: token
-            }
-        });
+        let authRequest;
+        if (clientId && clientSecrets) {
+            const auth = btoa(clientId + ":" + clientSecrets); // Encode to Base64
+            authRequest = (0, request_1.default)(tokenUrl, {
+                method: "POST",
+                responseType: "json",
+                headers: {
+                    "Authorization": "Basic " + auth,
+                    "accept": "application/json"
+                }
+            });
+        }
+        else {
+            const claims = {
+                iss: clientId,
+                sub: clientId,
+                aud: tokenUrl,
+                exp: Math.round(Date.now() / 1000) + accessTokenLifetime,
+                jti: node_jose_1.default.util.randomBytes(10).toString("hex")
+            };
+            const token = jsonwebtoken_1.default.sign(claims, privateKey.toPEM(true), {
+                algorithm: privateKey.alg,
+                keyid: privateKey.kid
+            });
+            authRequest = (0, request_1.default)(tokenUrl, {
+                method: "POST",
+                responseType: "json",
+                form: {
+                    scope: this.options.scope || "system/*.rs",
+                    grant_type: "client_credentials",
+                    client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+                    client_assertion: token
+                }
+            });
+        }
         const abort = () => {
             debug("Aborting authorization request");
             authRequest.cancel();

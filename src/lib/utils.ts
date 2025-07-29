@@ -231,25 +231,6 @@ export function getAccessTokenExpiration(tokenResponse: Types.TokenResponse): nu
     // Option 3 - if none of the above worked set this to 5 minutes after now
     return now + 300;
 }
-
-/**
- * Given a token response, computes and returns the expiresAt timestamp.
- * Note that this should only be used immediately after an access token is
- * received, otherwise the computed timestamp will be incorrect.
- */
-export function getAuthTokenExpiration(tokenResponse: Types.TokenResponse): number
-{
-    const now = Math.floor(Date.now() / 1000);
-
-    // Option 1 - using the expires_in property of the token response
-    if (tokenResponse.expires_in) {
-        return now + tokenResponse.expires_in;
-    }
-
-    // Option 2 - if none of the above worked set this to 5 minutes after now
-    return now + 1200;
-}
-
 /**
  * Returns the byte size with units
  * @param fileSizeInBytes The size to format

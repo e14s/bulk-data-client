@@ -1,13 +1,11 @@
 import { S3 } from "aws-sdk";
 import { CreateBucketRequest } from 'aws-sdk/clients/s3';
 import { S3Client, PutBucketPolicyCommand } from '@aws-sdk/client-s3';
-
-const
-  config = {
-    bucket_name: 'fhir-bulk-data',
-    aws_region: 'us-east-1'
-  };
-  
+import { config } from '../config/index';
+/**
+ * This file is responsible for initializing the S3 bucket and setting up the necessary policies.
+ * It checks if the bucket exists, creates it if it does not, and applies a public read policy.
+ */
 // Define the policy
 const bucketPolicy = {
   Version: "2012-10-17",
@@ -29,6 +27,11 @@ const bucketPolicy = {
 const s3Client = new S3Client({ region: config.aws_region });
 
 // --- Main Function to Add Policy ---
+/**
+ * Adds a bucket policy to the specified S3 bucket.
+ * This function is used to set the public read policy for the bucket.
+ * @returns {Promise<void>}
+ */
 const addBucketPolicy = async () => {
   try {
     // Prepare the parameters for the PutBucketPolicyCommand
@@ -70,8 +73,8 @@ const checkBucket = async (s3: S3, bucket:string) => {
     console.log("Bucket already Exist", res.$response.data);
     return { success: true, message: "Bucket already Exist",data: {}};
   } catch (error) {
-    console.log("Error bucket don't exsit", error);
-    return { success: false, message: "Error bucket don't exsit",data: error };
+    console.log("Error bucket don't exist", error);
+    return { success: false, message: "Error bucket don't exist",data: error };
   }
 };
 
@@ -82,14 +85,17 @@ const checkBucket = async (s3: S3, bucket:string) => {
   * @returns {Promise<{success:boolean; message: string; data: string;}>}
 */
 const createBucket = async (s3: S3) => {
-  const params: CreateBucketRequest = { Bucket: config.bucket_name,
-    CreateBucketConfiguration: {
-      // Set your region here
-      LocationConstraint: config.aws_region
-    }
-  }
+  // Define the parameters for the bucket creation
+  const bucketParams = {
+    Bucket: config.bucket_name,
+    ...(config.aws_region !== 'us-east-1' && { // LocationConstraint if the region is NOT us-east-1
+      CreateBucketConfiguration: {
+        LocationConstraint: config.aws_region
+      }
+    })
+  };
   try {
-    const res = await s3.createBucket(params).promise();
+    const res = await s3.createBucket(bucketParams).promise();
     console.log("Bucket Created Successfull", res.Location);
     return {success: true, message: "Bucket Created Successfull",data: res.Location};
   } catch (error) {
@@ -105,16 +111,18 @@ const createBucket = async (s3: S3) => {
   * @name initBucket
   * @returns {void}
 */
-export const initBucket = async (s3: S3) => {
+const initBucket = async (s3: S3) => {
+  // Check if the bucket already exists
   const bucketStatus = await checkBucket(s3, config.bucket_name);
   if( !bucketStatus.success ) { // check if the bucket don't exist
     let bucket = await createBucket(s3); // create new bucket
     if( !bucket.success ) {
-      console.error("Error creating bucket:", bucket.message);
+      console.error("Error creating bucket:");
       return {success: false, message: "Error creating bucket", data: bucket.message};
     }
     console.log(bucket.message);
   }
+  return {success: true, message: "Bucket has been verified",data: bucketStatus.message};
 }
 
-export default initBucket;
+export { initBucket, addBucketPolicy };

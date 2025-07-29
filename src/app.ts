@@ -1,16 +1,16 @@
-import                               "colors"
-import { Command }              from "commander"
-import { resolve }              from "path"
-import jose                     from "node-jose"
-import prompt                   from "prompt-sync"
-import { BulkDataClient }       from ".."
-import { detectTokenUrl, exit } from "./lib/utils"
-import Client                   from "./lib/BulkDataClient"
-import CLIReporter              from "./reporters/cli"
-import TextReporter             from "./reporters/text"
-import { createLogger }         from "./loggers"
-import aws                      from "aws-sdk"
-import initBucket               from "./bootstrap";
+import                                  "colors"
+import { Command }                      from "commander"
+import { resolve }                      from "path"
+import jose                             from "node-jose"
+import prompt                           from "prompt-sync"
+import { BulkDataClient }               from ".."
+import { detectTokenUrl, exit }         from "./lib/utils"
+import Client                           from "./lib/BulkDataClient"
+import CLIReporter                      from "./reporters/cli"
+import TextReporter                     from "./reporters/text"
+import { createLogger }                 from "./loggers"
+import aws                              from "aws-sdk"
+import { initBucket, addBucketPolicy }  from "./bootstrap";
 
 const reporters = {
     cli : CLIReporter,
@@ -65,6 +65,7 @@ APP.action(async (args: BulkDataClient.CLIOptions) => {
             sessionToken: options.awsSessionToken,
             region: options.awsRegion
         })
+        
         const s3 = new aws.S3();            
         // Initialize bucket
         const bucketStatus = await initBucket(s3);
@@ -72,9 +73,16 @@ APP.action(async (args: BulkDataClient.CLIOptions) => {
             console.error("Error initializing bucket:");
             return;
         }
-        console.log(bucketStatus.message);
+
+/* 
+        // Add bucket policy
+        console.log("Adding bucket policy...");
+        await addBucketPolicy(); // public policies are blocked by the BlockPublicPolicy block public access setting
+        // If the bucket policy is successfully added, log the success message
+        console.log("Bucket policy added successfully.");
+*/
     } else {
-        console.log("AWS credentials or region not provided. Skipping S3 bucket initialization.");
+        console.log("AWS credentials or region not provided. Cannot proceed with S3 bucket initialization.");
         return;
     }
    
@@ -131,7 +139,7 @@ APP.action(async (args: BulkDataClient.CLIOptions) => {
     }
 
     // Verify Access Token -------------------------------------------------------
-    if (options.authUrl !== "none") {
+    if (options.authUrl) {
         if (!options.clientId) {
             console.log(
                 "A 'clientId' option must be set in the config file!".red
