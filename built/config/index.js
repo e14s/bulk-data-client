@@ -30,7 +30,7 @@ dotenv.config();
 * Config file
 */
 exports.config = {
-    bucket_name: process.env.BUCKET_NAME ?? 'fhir-bulk-data-1',
+    bucket_name: process.env.BUCKET_NAME ?? 'fhir-bulk-data',
     aws_region: process.env.AWS_REGION ?? 'us-east-1'
 };
 // Debug purpose: Log the environment variables

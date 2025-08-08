@@ -316,7 +316,12 @@
     /**
     * Only needed if `destination` points to S3
     */
-    awsSessionToken:  process.env.AWS_SESSION_TOKEN || "<INPUT_SESSION_TOKEN>",   
+    awsSessionToken:  process.env.AWS_SESSION_TOKEN || "<INPUT_SESSION_TOKEN>",  
+
+    /**
+    * Only needed if `destination` points to S3
+    */
+    bucket: process.env.BUCKET_NAME || "fhir-bulk-data",   
 
 
     log: {

@@ -542,6 +542,11 @@ export declare namespace BulkDataClient {
          */
         awsSessionToken: string        
 
+        /**
+         * Only needed if `destination` points to S3
+         */
+        bucket: string            
+
         log: LoggingOptions
 
         /**

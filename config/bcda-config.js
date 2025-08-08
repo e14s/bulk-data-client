@@ -45,12 +45,12 @@
     /**
      * This is not needed for open servers
      */
-    clientId: "f0d89614-efb9-49fa-bb38-996811f235a1",
+    clientId: "e75679c2-1b58-4cf5-8664-d3706de8caf5",
 
         /**
      * This is not needed for open servers
      */
-    clientSecrets: "2aa8b8f96f62370f3abe951cc715171394fa4a688f1f1a7252a6a5824571c07931a8a6f1dede92a0",
+    clientSecrets: "67570807508212a220cc364d4406b9bd560276142d46257f76ba28dd9a0ff969e0c26db21c9d925c",
 
     /**
      * The scope to use in the authorization request. If not set, defaults to
