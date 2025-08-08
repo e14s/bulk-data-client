@@ -26,9 +26,11 @@ This configuration will upload files to S3 bucket in BCDA folder.
 BCDA Credential Link for Sandbox: https://bcda.cms.gov/api-documentation/get-a-bearer-token.html#sandbox-credentials
 
 File Server URL: https://sandbox.bcda.cms.gov/api/v2/
+
 Authentication URL: https://sandbox.bcda.cms.gov/auth/token
 
 Client ID: Needs to be added from BCDA credential website
+
 Client Secrets: Needs to be added from BCDA credential website
 
 ```sh
