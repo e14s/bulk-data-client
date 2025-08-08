@@ -24,6 +24,11 @@
      * The Bulk Data server token URL ("none" for open servers)
      */
     tokenUrl: "none",
+
+    /**
+     * The BCDA token URL
+     */
+    authUrl: "none",     
  
     /**
      * The private key (JWK) used to sign authentication tokens. This is not
@@ -37,6 +42,11 @@
     clientId: "",
 
     /**
+     * This is not needed for open servers
+     */
+    clientSecrets: "",    
+
+    /**
      * The scope to use in the authorization request. If not set, defaults to
      * "system/*.rs"
      */
@@ -46,7 +56,7 @@
      * The access token lifetime in seconds. Note that the authentication server
      * may ignore or restrict this to its own boundaries
      */
-    accessTokenLifetime: 300,
+    accessTokenLifetime: 300, // 5 minutes
 
     /**
      * The default reporter is "cli". That works well in terminal and
@@ -306,17 +316,17 @@
     /**
      * Only needed if `destination` points to S3
      */
-    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID || "<INPUT_ACCESS_KEY_ID>",
+    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
     
     /**
      * Only needed if `destination` points to S3
      */
-    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "<INPUT_SECRET_ACCESS_KEY>",
+    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 
     /**
     * Only needed if `destination` points to S3
     */
-    awsSessionToken:  process.env.AWS_SESSION_TOKEN || "<INPUT_SESSION_TOKEN>",  
+    awsSessionToken:  process.env.AWS_SESSION_TOKEN,  
 
     /**
     * Only needed if `destination` points to S3

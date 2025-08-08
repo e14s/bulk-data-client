@@ -228,8 +228,8 @@ export function getAccessTokenExpiration(tokenResponse: Types.TokenResponse): nu
         }
     }
 
-    // Option 3 - if none of the above worked set this to 5 minutes after now
-    return now + 300;
+    // Option 3 - if none of the above worked set this to 5 or 20 minutes minutes after now
+    return now + 1200;
 }
 /**
  * Returns the byte size with units

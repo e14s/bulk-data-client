@@ -322,25 +322,32 @@ class BulkDataClient extends EventEmitter
             return this.accessToken;
         }
 
-        const { tokenUrl, clientId, clientSecrets, accessTokenLifetime, privateKey } = this.options;
+        const { authUrl, tokenUrl, clientId, clientSecrets, privateKey, accessTokenLifetime } = this.options;
 
-        if (!tokenUrl || tokenUrl == "none" || !clientId || !privateKey ||  !clientSecrets) {
-            return ""
-        }
 
         let authRequest: ReturnType<typeof request<Response<Types.TokenResponse>>>;
 
-        if (clientId && clientSecrets) {
+        if (authUrl.startsWith("https://") && clientId && clientId.trim() !== "" && clientSecrets && clientSecrets.trim() !== "") {
+            debug("Requesting access token using JWT assertion")
+            if (!authUrl || authUrl == "none" || !clientId || !clientSecrets) {
+                debug("No tokenUrl or clientId or clientSecrets provided, cannot request access token")
+                return ""
+            }              
             const auth = btoa(clientId+":"+clientSecrets); // Encode to Base64
-            authRequest = request<Types.TokenResponse>(tokenUrl, {
+            authRequest = request<Types.TokenResponse>(authUrl, {
                 method: "POST",
                 responseType: "json",
                 headers: {
                     "Authorization": "Basic " + auth,
                     "accept": "application/json"
                 }
-            });        
+            });
         } else {
+            debug("Requesting access token using JWT assertion")
+            if (!tokenUrl || tokenUrl == "none" || !clientId || !privateKey) {
+                debug("No tokenUrl or clientId or privateKey provided, cannot request access token")
+                return ""
+            }            
             const claims = {
                 iss: clientId,
                 sub: clientId,
@@ -365,7 +372,6 @@ class BulkDataClient extends EventEmitter
                 }
             });
         }
-
         const abort = () => {
             debug("Aborting authorization request")
             authRequest.cancel()

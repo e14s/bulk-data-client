@@ -26,7 +26,7 @@
     tokenUrl: "none",
 
     /**
-     * The Bulk Data server token URL
+     * The BCDA token URL
      */
     authUrl: "https://sandbox.bcda.cms.gov/auth/token",    
  
@@ -35,22 +35,18 @@
      * needed for open servers
      */
     privateKey: {},
-
+   
     /**
-     * Bearer access token. This is not
-     * needed for open servers
+     * This is not needed for open servers
+     * clientId: e75679c2-1b58-4cf5-8664-d3706de8caf5
      */
-    //access_token: "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDgwMTMwMzcsImp0aSI6IjI4Mjk3NDcxLTU5OTgtNDJjMC05NGE4LWU0MDhjNzEyNjkyMCIsImlhdCI6MTc0ODAxMTgzNywiaXNzIjoic3NhcyIsInVzZSI6IkFjY2Vzc1Rva2VuIiwiY2lkIjoiMjQ2MmM5NmItNjQyNy00ZWZiLWFlZDctMTE4ZTIwYzJlOTk3Iiwic3lzIjoiMzQiLCJkYXQiOiJ7XCJjbXNfaWRzXCI6W1wiQTk5OTRcIl19In0.Wqtb6FVKeWNUYTmie3Y3p7GKXcdtWtTvSVcZ5JHaNYE5nrO4XGWYFWLZy-wweaOrUPoVSz9yo_7JAGqftoLpD8MhHLB7Lo9q_EiWGD9Z8uncx1YljEta2rP3PbZE8TFQOr_MkpEhrjZtUbomhmylFaRlIpNxX-ZNEYlKfnd-kR4LRMx_q37otSy9v4EDBPEFaiw103fjtEhf-G35Gte-lv6B5hP1M5hvxKpd7aP1rwak8wRbAzbWAtfEO6y4CMPPiypf5L9Q_5CVfkzma4w8yIej2MN7rMQ_8IUtSldta9N0Q6HPOiSdvLp4iKI-NpUuVn4pIv4RoGfuA7Z-mv-CZQ",    
+    clientId: process.env.CLIENT_ID,
 
     /**
      * This is not needed for open servers
+     * clientSecrets: 67570807508212a220cc364d4406b9bd560276142d46257f76ba28dd9a0ff969e0c26db21c9d925c
      */
-    clientId: "e75679c2-1b58-4cf5-8664-d3706de8caf5",
-
-        /**
-     * This is not needed for open servers
-     */
-    clientSecrets: "67570807508212a220cc364d4406b9bd560276142d46257f76ba28dd9a0ff969e0c26db21c9d925c",
+    clientSecrets: process.env.CLIENT_SECRETS,
 
     /**
      * The scope to use in the authorization request. If not set, defaults to
@@ -62,13 +58,7 @@
      * The access token lifetime in seconds. Note that the authentication server
      * may ignore or restrict this to its own boundaries
      */
-    accessTokenLifetime: 300,
-
-    /**
-     * The access token lifetime in seconds. Note that the authentication server
-     * may ignore or restrict this to its own boundaries
-     */
-    authTokenLifetime: 1200,    
+    accessTokenLifetime: 1200, // 20 minutes
 
     /**
      * The default reporter is "cli". That works well in terminal and
@@ -326,17 +316,17 @@
     /**
      * Only needed if `destination` points to S3
      */
-    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID || "<INPUT_ACCESS_KEY_ID>",
+    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
     
     /**
      * Only needed if `destination` points to S3
      */
-    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "<INPUT_SECRET_ACCESS_KEY>",
+    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 
     /**
     * Only needed if `destination` points to S3
     */
-    awsSessionToken:  process.env.AWS_SESSION_TOKEN || "<INPUT_SESSION_TOKEN>",   
+    awsSessionToken:  process.env.AWS_SESSION_TOKEN,   
 
 
     log: {

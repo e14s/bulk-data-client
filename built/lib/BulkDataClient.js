@@ -168,14 +168,16 @@ class BulkDataClient extends events_1.EventEmitter {
         if (this.accessToken && this.accessTokenExpiresAt - 10 > Date.now() / 1000) {
             return this.accessToken;
         }
-        const { tokenUrl, clientId, clientSecrets, accessTokenLifetime, privateKey } = this.options;
-        if (!tokenUrl || tokenUrl == "none" || !clientId || !privateKey || !clientSecrets) {
-            return "";
-        }
+        const { authUrl, tokenUrl, clientId, clientSecrets, privateKey, accessTokenLifetime } = this.options;
         let authRequest;
-        if (clientId && clientSecrets) {
+        if (authUrl.startsWith("https://") && clientId && clientId.trim() !== "" && clientSecrets && clientSecrets.trim() !== "") {
+            debug("Requesting access token using JWT assertion");
+            if (!authUrl || authUrl == "none" || !clientId || !clientSecrets) {
+                debug("No tokenUrl or clientId or clientSecrets provided, cannot request access token");
+                return "";
+            }
             const auth = btoa(clientId + ":" + clientSecrets); // Encode to Base64
-            authRequest = (0, request_1.default)(tokenUrl, {
+            authRequest = (0, request_1.default)(authUrl, {
                 method: "POST",
                 responseType: "json",
                 headers: {
@@ -185,6 +187,11 @@ class BulkDataClient extends events_1.EventEmitter {
             });
         }
         else {
+            debug("Requesting access token using JWT assertion");
+            if (!tokenUrl || tokenUrl == "none" || !clientId || !privateKey) {
+                debug("No tokenUrl or clientId or privateKey provided, cannot request access token");
+                return "";
+            }
             const claims = {
                 iss: clientId,
                 sub: clientId,

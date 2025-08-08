@@ -20,6 +20,11 @@
      * The Bulk Data server token URL ("none" for open servers)
      */
     tokenUrl: "none",
+
+    /**
+     * The BCDA token URL
+     */
+    authUrl: "none",         
  
     /**
      * The private key (JWK) used to sign authentication tokens. This is not
@@ -31,6 +36,11 @@
      * This is not needed for open servers
      */
     clientId: "",
+
+    /**
+     * This is not needed for open servers
+     */
+    clientSecrets: "",    
 
     /**
      * The scope to use in the authorization request. If not set, defaults to

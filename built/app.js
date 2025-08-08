@@ -52,31 +52,27 @@ APP.action(async (args) => {
     }
     Object.assign(options, params);
     //S3 Bucket Creation --------------------------------------------------------
-    if (options.awsAccessKeyId && options.awsSecretAccessKey && options.awsRegion) {
-        aws_sdk_1.default.config.update({
-            accessKeyId: options.awsAccessKeyId,
-            secretAccessKey: options.awsSecretAccessKey,
-            sessionToken: options.awsSessionToken,
-            region: options.awsRegion
-        });
-        const s3 = new aws_sdk_1.default.S3();
-        // Initialize bucket
-        const bucketStatus = await (0, bootstrap_1.initBucket)(s3);
-        if (!bucketStatus?.success) {
-            console.error("Error initializing bucket:");
+    if (options.destination && options.destination.startsWith("s3://")) {
+        console.log("S3 destination detected. Initializing S3 bucket...");
+        if (options.awsAccessKeyId && options.awsSecretAccessKey && options.awsRegion) {
+            aws_sdk_1.default.config.update({
+                accessKeyId: options.awsAccessKeyId,
+                secretAccessKey: options.awsSecretAccessKey,
+                sessionToken: options.awsSessionToken,
+                region: options.awsRegion
+            });
+            const s3 = new aws_sdk_1.default.S3();
+            // Initialize bucket
+            const bucketStatus = await (0, bootstrap_1.initBucket)(s3);
+            if (!bucketStatus?.success) {
+                console.error("Error initializing bucket:");
+                return;
+            }
+        }
+        else {
+            console.log("AWS credentials or region not provided. Skipping S3 bucket initialization.");
             return;
         }
-        /*
-                // Add bucket policy
-                console.log("Adding bucket policy...");
-                await addBucketPolicy(); // public policies are blocked by the BlockPublicPolicy block public access setting
-                // If the bucket policy is successfully added, log the success message
-                console.log("Bucket policy added successfully.");
-        */
-    }
-    else {
-        console.log("AWS credentials or region not provided. Cannot proceed with S3 bucket initialization.");
-        return;
     }
     if (!options.fhirUrl) {
         console.log("A 'fhirUrl' is required as configuration option, or as '-f' or " +
@@ -116,7 +112,7 @@ APP.action(async (args) => {
         }
     }
     // Verify Access Token -------------------------------------------------------
-    if (options.authUrl) {
+    if (options.authUrl !== "none") {
         if (!options.clientId) {
             console.log("A 'clientId' option must be set in the config file!".red);
             return;

@@ -80,8 +80,10 @@ The Bulk Data Client uses `js` configuration files, but you can think of them as
 
 - *string* **`fhirUrl`** - FHIR server base URL. Can be overridden by the `-f` or `--fhir-url` CLI parameter.
 - *string* **`tokenUrl`** - The Bulk Data server token URL (use `"none"` for open servers and `""` to try to auto-detect it)
+- *string* **`authUrl`** - BCDA token URL (use `"none"` for open servers and `""` to try to auto-detect it)
 - *object* **`privateKey`** - The private key (as `JWK`) used to sign authentication tokens. This is not needed for open servers
-- *string* **`clientId`** - This is not needed for open servers
+- *string* **`clientId`** - This is not needed for open servers, but needed for BCDA
+- *string* **`clientSecrets`** - This is not needed for open servers, but needed for BCDA
 - *number* **`accessTokenLifetime`** - The access token lifetime in seconds. Note that the authentication server may ignore or restrict this to its own boundaries
 - *string* **`reporter`** - The default reporter is "cli". That works well in terminal and renders some fancy stuff like progress bars. However, this does not look good when your STDOUT ends up in log files. For example, if you are using this tool as part of some kind of pipeline and want to maintain clean logs, then consider changing this to "text". Can be overridden from terminal parameter `--reporter`.
   
