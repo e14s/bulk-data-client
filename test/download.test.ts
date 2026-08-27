@@ -7,7 +7,6 @@ import { join } from "path"
 
 
 describe('download', function() {
-    this.timeout(60000)
 
     after(() => {
         emptyFolder(__dirname + "/tmp/downloads/attachments")

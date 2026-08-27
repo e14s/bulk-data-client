@@ -1,52 +1,21 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const pdfJsLib = __importStar(require("pdfjs-dist/legacy/build/pdf.js"));
+// pdfjs-dist v4+ is published as ESM-only, but this project compiles to
+// CommonJS. Load it through a dynamic import created with the Function
+// constructor so tsc does not transpile it into a require() call.
+const loadPdfJsLib = () => new Function('return import("pdfjs-dist/legacy/build/pdf.mjs")')();
 class PDF {
     static async getPageText(pdf, pageNo) {
         const page = await pdf.getPage(pageNo);
-        const tokenizedText = await page.getTextContent({
-            /**
-             * - Replaces all occurrences of
-             * whitespace with standard spaces (0x20). The default value is `false`.
-             */
-            normalizeWhitespace: true,
-            /**
-             * - Do not attempt to combine
-             * same line {@link TextItem }'s. The default value is `false`.
-             */
-            disableCombineTextItems: false,
-            /**
-             * - When true include marked
-             * content items in the items array of TextContent. The default is `false`.
-             */
-            includeMarkedContent: false
-        });
+        const tokenizedText = await page.getTextContent();
         return tokenizedText.items.map((token) => token.str).join('\n');
     }
     static async getPDFText(source) {
+        // pdf.js v4 rejects Node Buffers; pass a plain Uint8Array copy instead
+        if (source && source.data instanceof Uint8Array) {
+            source = { ...source, data: new Uint8Array(source.data) };
+        }
+        const pdfJsLib = await loadPdfJsLib();
         const pdf = await pdfJsLib.getDocument(source).promise;
         const maxPages = pdf.numPages;
         const pageTextPromises = [];
