@@ -1,0 +1,3 @@
+# Default owners: review is requested automatically on every PR
+# (SDLC section 4.4: at least one qualified reviewer other than the author).
+* @brianfinch
