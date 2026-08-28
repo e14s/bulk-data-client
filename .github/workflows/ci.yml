@@ -33,7 +33,7 @@ jobs:
       # Coverage floor is a ratchet: it starts at the measured baseline and is
       # raised as coverage improves. Policy target is 90% lines (SDLC section 8).
       - name: Enforce coverage baseline
-        run: npx nyc check-coverage --lines 63 --statements 62 --functions 60 --branches 48
+        run: npx nyc check-coverage --lines 72 --statements 72 --functions 73 --branches 57
 
       - name: Upload coverage report
         if: always()
