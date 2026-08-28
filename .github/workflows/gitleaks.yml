@@ -14,7 +14,7 @@ jobs:
     name: gitleaks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Full history so every commit is scanned, not just the PR head
           fetch-depth: 0
