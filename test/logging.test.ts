@@ -6,8 +6,6 @@ import { emptyFolder, mockServer, invoke } from "./lib"
 
 describe('Logging', function () {
 
-    this.timeout(10000);
-
     after(async () => {
         emptyFolder(__dirname + "/tmp/downloads/attachments")
         emptyFolder(__dirname + "/tmp/downloads/error")
@@ -246,7 +244,7 @@ describe('Logging', function () {
                 }
             })
 
-            const { log } = await invoke()
+            const { log } = await invoke({ options: { log: { logStatusProgress: true } } })
             const logs = log.split("\n").filter(Boolean).map(line => JSON.parse(line)).filter(l => l.eventId === "status_progress");
             
             expect(logs.length, "must have 3 status_progress log entries").to.equal(3)
@@ -256,7 +254,6 @@ describe('Logging', function () {
         })
 
         it ("logs status_error events", async () => {
-            this.timeout(10000);
 
             mockServer.mock("/metadata", { status: 200, body: {} });
 
@@ -285,7 +282,6 @@ describe('Logging', function () {
         })
 
         it ("can filter responseHeaders of status_error events with client's logResponseHeaders option", async () => {
-            this.timeout(10000);
 
             mockServer.mock("/metadata", { status: 200, body: {} });
 
@@ -343,7 +339,6 @@ describe('Logging', function () {
         })
 
         it ("logs status_error on invalid manifest", async () => {
-            this.timeout(10000);
 
             mockServer.mock("/metadata", { status: 200, body: {} });
 
