@@ -37,14 +37,14 @@
     privateKey: {},
    
     /**
-     * This is not needed for open servers
-     * clientId: e75679c2-1b58-4cf5-8664-d3706de8caf5
+     * This is not needed for open servers. Set via the CLIENT_ID environment
+     * variable; never hard-code credentials here.
      */
     clientId: process.env.CLIENT_ID,
 
     /**
-     * This is not needed for open servers
-     * clientSecrets: 67570807508212a220cc364d4406b9bd560276142d46257f76ba28dd9a0ff969e0c26db21c9d925c
+     * This is not needed for open servers. Set via the CLIENT_SECRETS
+     * environment variable; never hard-code credentials here.
      */
     clientSecrets: process.env.CLIENT_SECRETS,
 
@@ -195,7 +195,7 @@
         timeout: 300000, // 300 seconds or 5 minutes custom timeout
         headers: {
             "x-client-id": "fhir-bulk", // pass custom headers
-//            "Authorization": "Bearer eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDgwMTMwMzcsImp0aSI6IjI4Mjk3NDcxLTU5OTgtNDJjMC05NGE4LWU0MDhjNzEyNjkyMCIsImlhdCI6MTc0ODAxMTgzNywiaXNzIjoic3NhcyIsInVzZSI6IkFjY2Vzc1Rva2VuIiwiY2lkIjoiMjQ2MmM5NmItNjQyNy00ZWZiLWFlZDctMTE4ZTIwYzJlOTk3Iiwic3lzIjoiMzQiLCJkYXQiOiJ7XCJjbXNfaWRzXCI6W1wiQTk5OTRcIl19In0.Wqtb6FVKeWNUYTmie3Y3p7GKXcdtWtTvSVcZ5JHaNYE5nrO4XGWYFWLZy-wweaOrUPoVSz9yo_7JAGqftoLpD8MhHLB7Lo9q_EiWGD9Z8uncx1YljEta2rP3PbZE8TFQOr_MkpEhrjZtUbomhmylFaRlIpNxX-ZNEYlKfnd-kR4LRMx_q37otSy9v4EDBPEFaiw103fjtEhf-G35Gte-lv6B5hP1M5hvxKpd7aP1rwak8wRbAzbWAtfEO6y4CMPPiypf5L9Q_5CVfkzma4w8yIej2MN7rMQ_8IUtSldta9N0Q6HPOiSdvLp4iKI-NpUuVn4pIv4RoGfuA7Z-mv-CZQ" // pass custom headers
+//            "Authorization": "Bearer <token>" // pass custom headers
         }
     },    
 
