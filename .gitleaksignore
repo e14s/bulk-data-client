@@ -1,0 +1,24 @@
+# Acknowledged historical findings (SDLC policy section 11 exceptions).
+# These secrets exist only in git history; the current tree is clean.
+#
+# Risk assessment recorded 2026-08-28, owner: @brianfinch, review at next annual policy review:
+# - config/README (commit 5dd1be9): AWS STS *temporary* session credentials
+#   (ASIA* access key + session token). Expired shortly after issuance; the
+#   long-term credentials that minted them were never committed. No rotation
+#   possible or needed.
+# - config/README.md / config/bcda-config.js (commits 7212153, 703d991, 09310b9):
+#   CMS BCDA *sandbox* client id/secret and short-lived sandbox bearer tokens.
+#   These are the publicly documented test credentials from
+#   https://bcda.cms.gov/api-documentation — not Element secrets.
+#
+# Removing these from history entirely requires a history rewrite (admin
+# decision, tracked in issue #31 discussion).
+09310b967cb64f5f82281e1d7b05995ad6cb2c3e:config/README.md:generic-api-key:36
+703d991e8a1f6ac304355b21ea41404cbe1ac0d4:config/bcda-config.js:generic-api-key:53
+09310b967cb64f5f82281e1d7b05995ad6cb2c3e:config/bcda-config.js:generic-api-key:47
+5dd1be9381faa7bb213ab9d1454155532c9ffbe3:config/README:generic-api-key:11
+5dd1be9381faa7bb213ab9d1454155532c9ffbe3:config/README:generic-api-key:12
+5dd1be9381faa7bb213ab9d1454155532c9ffbe3:config/README:aws-access-token:10
+7212153bb38d0ded796baed15350ac9278390eb6:config/bcda-config.js:generic-api-key:49
+7212153bb38d0ded796baed15350ac9278390eb6:config/bcda-config.js:jwt:39
+7212153bb38d0ded796baed15350ac9278390eb6:config/bcda-config.js:jwt:204

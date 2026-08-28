@@ -6,10 +6,13 @@ In order make it workable, make sure you configure AWS config settings in your r
 
 ![AWS Account](account.png)
 
+Never commit real credentials to this repository. Obtain temporary credentials
+from your AWS access portal and set them only in your local environment:
+
 ```sh
-export AWS_ACCESS_KEY_ID="ASIAZZBVXAFOMDPSMJZI"
-export AWS_SECRET_ACCESS_KEY="bFDgw9usmcOwBeKx9/jr2svEeAoHDFWKr72cY2s1"
-export AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjEKj//////////8k27U9L9GAD2bSMLSFLo6DRkE3jZKO1QRhNNNC1Wu6NeHojx+0="
+export AWS_ACCESS_KEY_ID="<your-access-key-id>"
+export AWS_SECRET_ACCESS_KEY="<your-secret-access-key>"
+export AWS_SESSION_TOKEN="<your-session-token>"
 ```
 
 In order to override the default value of Bucket name and region, you can set the environment variable.
@@ -34,8 +37,8 @@ Client ID: Needs to be added from BCDA credential website
 Client Secrets: Needs to be added from BCDA credential website
 
 ```sh
-export CLIENT_ID="e75679c2-1b58-4cf5-8664-d3706de8caf5"
-export CLIENT_SECRETS="67570807508212a220cc364d4406b9bd560276142d46257f76ba28dd9a0ff969e0c26db21c9d925c"
+export CLIENT_ID="<client-id-from-bcda-credential-website>"
+export CLIENT_SECRETS="<client-secret-from-bcda-credential-website>"
 ```
 
 For running Bulk client to upload files in AWS S3 bucket use the following CLI command
