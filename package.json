@@ -29,7 +29,7 @@
   "homepage": "https://github.com/smart-on-fhir/bulk-data-client#readme",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1120.0",
-    "@hapi/code": "^8.0.3",
+    "@hapi/code": "^9.0.3",
     "aws-sdk": "^2.1693.0",
     "colors": "^1.4.0",
     "commander": "^8.1.0",
