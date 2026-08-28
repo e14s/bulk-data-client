@@ -1,0 +1,52 @@
+name: Dependency Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly scheduled scan against main (SDLC section 7.4)
+    - cron: "42 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  audit-license-sbom:
+    name: audit-license-sbom
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # SDLC 7.4 / 8: no high or critical findings in production dependencies.
+      # Accepted lower-severity findings are documented as section 11
+      # exceptions in SECURITY.md / the issue tracker.
+      - name: npm audit (production, high+)
+        run: npm audit --omit=dev --audit-level=high
+
+      # SDLC 7.3: only permissive licenses in the production tree; anything
+      # outside this allowlist (copyleft or unknown) fails and requires
+      # IT / Security Lead approval before merge.
+      - name: License allowlist check
+        run: >
+          npx --yes license-checker --production
+          --onlyAllow "MIT;Apache-2.0;ISC;BSD-3-Clause;BSD-2-Clause;BSD;0BSD;Unlicense;CC0-1.0;(MIT OR WTFPL);(BSD-3-Clause OR GPL-2.0);(MIT AND Zlib);(BSD-2-Clause OR MIT OR Apache-2.0)"
+
+      # SDLC 7.1: machine-readable SBOM retained as build evidence
+      - name: Generate CycloneDX SBOM
+        run: npx --yes @cyclonedx/cyclonedx-npm --omit dev --output-file sbom.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.json
