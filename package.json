@@ -4,7 +4,7 @@
   "description": "",
   "main": "built/app.js",
   "engines": {
-    "node": ">=15 <19"
+    "node": ">=20"
   },
   "scripts": {
     "clean": "rm -rf ./built",
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/smart-on-fhir/bulk-data-client#readme",
   "dependencies": {
-    "@aws-sdk/client-s3": "3.967.0",
+    "@aws-sdk/client-s3": "^3.1120.0",
     "@hapi/code": "^8.0.3",
     "aws-sdk": "^2.1693.0",
     "colors": "^1.4.0",
@@ -38,7 +38,7 @@
     "jsonwebtoken": "^9.0.3",
     "moment": "^2.29.1",
     "node-jose": "^2.0.0",
-    "pdfjs-dist": "^4.8.69",
+    "pdfjs-dist": "^4.10.38",
     "prompt-sync": "^4.2.0",
     "winston": "^3.8.2",
     "zlib": "^1.0.5"
@@ -64,6 +64,8 @@
     "fast-xml-parser": "^5.11.1",
     "mocha": {
       "diff": "^8.0.4"
-    }
+    },
+    "serialize-javascript": "^7.1.0",
+    "uuid": "^11.1.1"
   }
 }
