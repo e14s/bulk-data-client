@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Application dependencies (SDLC section 7.4: scheduled scans against main)
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    groups:
+      # Group minor/patch bumps to keep PR volume manageable;
+      # security updates always open immediately regardless of schedule
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # Keep pinned GitHub Actions current
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
