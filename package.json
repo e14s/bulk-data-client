@@ -38,7 +38,7 @@
     "jsonwebtoken": "^9.0.3",
     "moment": "^2.29.1",
     "node-jose": "^2.0.0",
-    "pdfjs-dist": "^4.10.38",
+    "pdfjs-dist": "^6.2.108",
     "prompt-sync": "^4.2.0",
     "winston": "^3.8.2",
     "zlib": "^1.0.5"
