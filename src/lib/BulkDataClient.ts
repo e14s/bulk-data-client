@@ -455,7 +455,11 @@ class BulkDataClient extends EventEmitter
             .then(res => {
                 const location = res.headers["content-location"];
                 if (!location) {
-                    throw new Error("The kick-off response did not include content-location header")
+                    // Carry the response along so the kickOffEnd handler below
+                    // can still log the export URL and response headers.
+                    const error: any = new Error("The kick-off response did not include content-location header")
+                    error.response = res
+                    throw error
                 }
                 this.emit("kickOffEnd", { 
                     response: res, 
@@ -467,11 +471,14 @@ class BulkDataClient extends EventEmitter
                 return location
             })
             .catch(error => {
+                // `error.response` is absent when the failure originates here
+                // rather than from the HTTP layer, e.g. the missing
+                // content-location error thrown above.
                 this.emit("kickOffEnd", { 
                     response: error.response || {}, 
                     capabilityStatement, 
                     requestParameters, 
-                    responseHeaders: this.formatResponseHeaders(error.response.headers),
+                    responseHeaders: this.formatResponseHeaders(error.response?.headers),
                 })
                 throw error
             });
@@ -870,7 +877,15 @@ class BulkDataClient extends EventEmitter
         // Run the pipeline
         // ---------------------------------------------------------------------
         try {
-            await pipeline(streams)
+            // `streams` is assembled conditionally above, so it is typed as a
+            // plain array. Node's promise pipeline overloads want a
+            // [source, ...transforms, destination] tuple, which it always is
+            // by the time we get here.
+            await pipeline(streams as [
+                NodeJS.ReadableStream,
+                ...NodeJS.ReadWriteStream[],
+                NodeJS.WritableStream
+            ])
         }
         catch (e: any) {
             this.emit("downloadError", {

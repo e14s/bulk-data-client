@@ -6,7 +6,7 @@ import { mockServer } from "./lib"
 describe('kick-off', () => {
     it("makes a patient-level export by default", async () => {
         mockServer.mock("/metadata", { status: 200, body: {} });
-        mockServer.mock("/Patient/\\$export", { status: 202, body: "", headers: { "content-location": "x" }});
+        mockServer.mock("/Patient/$export", { status: 202, body: "", headers: { "content-location": "x" }});
         // @ts-ignore
         const client = new BulkDataClient({ ...baseSettings, fhirUrl: mockServer.baseUrl })
         await client.kickOff()
@@ -14,7 +14,7 @@ describe('kick-off', () => {
 
     it("can make a system-level export", async () => {
         mockServer.mock("/metadata", { status: 200, body: {} });
-        mockServer.mock("/\\$export", { status: 202, body: "", headers: { "content-location": "x" }});
+        mockServer.mock("/$export", { status: 202, body: "", headers: { "content-location": "x" }});
         // @ts-ignore
         const client = new BulkDataClient({ ...baseSettings, fhirUrl: mockServer.baseUrl, global: true })
         await client.kickOff()
@@ -22,7 +22,7 @@ describe('kick-off', () => {
 
     it("can make a group-level export", async () => {
         mockServer.mock("/metadata", { status: 200, body: {} });
-        mockServer.mock("/Group/abc/\\$export", { status: 202, body: "", headers: { "content-location": "x" }});
+        mockServer.mock("/Group/abc/$export", { status: 202, body: "", headers: { "content-location": "x" }});
         // @ts-ignore
         const client = new BulkDataClient({ ...baseSettings, fhirUrl: mockServer.baseUrl, group: "abc" })
         await client.kickOff()

@@ -49,7 +49,7 @@ describe('Logging', function () {
             expect(entry.eventDetail).to.equal({
                 "exportUrl": mockServer.baseUrl + "/Patient/$export",
                 "errorCode": 404,
-                "errorBody": "Not Found",
+                "errorBody": "",
                 "softwareName": "Software Name",
                 "softwareVersion": "Software Version",
                 "softwareReleaseDate": "01-02-03",
@@ -83,8 +83,8 @@ describe('Logging', function () {
             expect(entry, "kickoff log entry not found").to.exist()
             expect(entry.eventDetail).to.equal({
                 "exportUrl": mockServer.baseUrl + "/Patient/$export",
-                "errorCode": 404,
-                "errorBody": "Not Found",
+                "errorCode": null,
+                "errorBody": null,
                 "softwareName": "Software Name",
                 "softwareVersion": "Software Version",
                 "softwareReleaseDate": "01-02-03",
@@ -108,8 +108,8 @@ describe('Logging', function () {
             expect(entry, "kickoff log entry not found").to.exist()
             expect(entry.eventDetail).to.equal({
                 "exportUrl": mockServer.baseUrl + "/Patient/$export",
-                "errorCode": 404,
-                "errorBody": "Not Found",
+                "errorCode": null,
+                "errorBody": null,
                 "softwareName": null,
                 "softwareVersion": null,
                 "softwareReleaseDate": null,
@@ -161,7 +161,7 @@ describe('Logging', function () {
                 }
             });
             // NOTE: Request endpoint is invalid without the "\\"
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status",
@@ -192,7 +192,7 @@ describe('Logging', function () {
                 }
             });
             // NOTE: Request endpoint is invalid without the "\\"
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status",
@@ -221,7 +221,7 @@ describe('Logging', function () {
 
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -257,7 +257,7 @@ describe('Logging', function () {
 
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -285,7 +285,7 @@ describe('Logging', function () {
 
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -313,7 +313,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -342,7 +342,7 @@ describe('Logging', function () {
 
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -372,7 +372,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -578,7 +578,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -619,7 +619,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -673,7 +673,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -713,7 +713,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -751,7 +751,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -806,7 +806,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
@@ -864,7 +864,7 @@ describe('Logging', function () {
             
             mockServer.mock("/metadata", { status: 200, body: {} });
 
-            mockServer.mock("/Patient/\\$export", {
+            mockServer.mock("/Patient/$export", {
                 status: 200,
                 headers: {
                     "content-location": mockServer.baseUrl + "/status"
