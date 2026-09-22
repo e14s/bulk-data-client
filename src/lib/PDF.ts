@@ -1,4 +1,4 @@
-// pdfjs-dist v4+ is published as ESM-only, but this project compiles to
+// pdfjs-dist is published as ESM-only (since v4), but this project compiles to
 // CommonJS. Load it through a dynamic import created with the Function
 // constructor so tsc does not transpile it into a require() call.
 const loadPdfJsLib = (): Promise<any> => new Function('return import("pdfjs-dist/legacy/build/pdf.mjs")')();
@@ -12,7 +12,7 @@ export default class PDF {
     }
 
     public static async getPDFText(source: any): Promise<string> {
-        // pdf.js v4 rejects Node Buffers; pass a plain Uint8Array copy instead
+        // pdf.js rejects Node Buffers; pass a plain Uint8Array copy instead
         if (source && source.data instanceof Uint8Array) {
             source = { ...source, data: new Uint8Array(source.data) };
         }
