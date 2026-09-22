@@ -103,7 +103,11 @@ export async function invoke({
 
         writeFileSync(configPath,  "module.exports = " + JSON.stringify(fullOptions, null, 4), "utf8")
         
+        // --transpile-only skips ts-node's per-spawn type check. The suite
+        // spawns the client once per test, and type errors are already caught
+        // by `npm run build`, so checking here only costs ~6s per test.
         const client = spawn("ts-node", [
+            "--transpile-only",
             "./src/app.ts",
             "--config",
             configPath,
