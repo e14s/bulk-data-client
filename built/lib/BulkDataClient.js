@@ -15,13 +15,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -287,7 +297,11 @@ class BulkDataClient extends events_1.EventEmitter {
             .then(res => {
             const location = res.headers["content-location"];
             if (!location) {
-                throw new Error("The kick-off response did not include content-location header");
+                // Carry the response along so the kickOffEnd handler below
+                // can still log the export URL and response headers.
+                const error = new Error("The kick-off response did not include content-location header");
+                error.response = res;
+                throw error;
             }
             this.emit("kickOffEnd", {
                 response: res,
@@ -299,11 +313,14 @@ class BulkDataClient extends events_1.EventEmitter {
             return location;
         })
             .catch(error => {
+            // `error.response` is absent when the failure originates here
+            // rather than from the HTTP layer, e.g. the missing
+            // content-location error thrown above.
             this.emit("kickOffEnd", {
                 response: error.response || {},
                 capabilityStatement,
                 requestParameters,
-                responseHeaders: this.formatResponseHeaders(error.response.headers),
+                responseHeaders: this.formatResponseHeaders(error.response?.headers),
             });
             throw error;
         });
@@ -535,7 +552,7 @@ class BulkDataClient extends events_1.EventEmitter {
             .catch(e => {
             if (e instanceof errors_1.FileDownloadError) {
                 this.emit("downloadError", {
-                    body: null,
+                    body: null, // Buffer
                     code: e.code || null,
                     fileUrl: e.fileUrl,
                     message: String(e.message || "File download failed"),
@@ -634,6 +651,10 @@ class BulkDataClient extends events_1.EventEmitter {
         // Run the pipeline
         // ---------------------------------------------------------------------
         try {
+            // `streams` is assembled conditionally above, so it is typed as a
+            // plain array. Node's promise pipeline overloads want a
+            // [source, ...transforms, destination] tuple, which it always is
+            // by the time we get here.
             await (0, promises_1.pipeline)(streams);
         }
         catch (e) {

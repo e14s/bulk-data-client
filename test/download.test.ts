@@ -109,7 +109,7 @@ describe('download', function() {
     it ("can download attachments from static URL", async () => {
 
         // Mock the kick-off response
-        mockServer.mock("/Patient/\\$export", {
+        mockServer.mock("/Patient/$export", {
             status: 202,
             headers: {
                 "Content-Location": mockServer.baseUrl + "/status"
@@ -191,7 +191,7 @@ describe('download', function() {
     it ("can download attachments from Binary URL", async () => {
 
         // Mock the kick-off response
-        mockServer.mock("/Patient/\\$export", {
+        mockServer.mock("/Patient/$export", {
             status: 202,
             headers: {
                 "Content-Location": mockServer.baseUrl + "/status"

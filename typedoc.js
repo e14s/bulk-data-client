@@ -81,10 +81,9 @@ module.exports = {
     //  --hideGenerator             Do not print the TypeDoc link at the end of the page.
     //  --hideLegend                Do not print the Legend for icons at the end of the page.
     
-    // Specifies the location to look for included documents
-    // (use [[include:FILENAME]] in comments).
-    // --includes DIRECTORY
-    includes: "./docs",
+    // NOTE: typedoc's `includes` option (for [[include:FILENAME]] comments)
+    // was removed in 0.28 in favour of `projectDocuments`. No source comment
+    // used it, so it is simply dropped here.
 
     //  --includeVersion            Add the package version to the project name.
     //  --intentionallyNotExported  A list of types which should not produce 'referenced but not documented' warnings.
@@ -120,7 +119,9 @@ module.exports = {
     // `none` to disable the index page and start the documentation on the
     // globals page.
     // --readme
-    readme: "../README.md",
+    // NOTE: typedoc 0.28 resolves this relative to the working directory
+    // rather than to this config file.
+    readme: "./README.md",
 
     //  --showConfig                Print the resolved configuration and exit
     //  --sort                      Specify the sort strategy for documented values
